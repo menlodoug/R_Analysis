@@ -1,0 +1,92 @@
+MPG Regression
+There are several variables that need to be included in the multiple regression model for Mecha_Car.  
+These are: vehicle.length, vehicle.weight, spoiler.angle, ground.clearance, AWD.  of these, vehicle.length
+and ground.clearance have the largest influence on the model.  The p-values are 2.60e-12 and 5.21e-08,
+respectively.  Vehicle weight, with a p-value of 0.0776 is not too far from the .05 threshhold, but not low
+enough to be considered significant (or non-random).
+
+The combined effect of the variables, produces a p-value of 5.35e-11, using the multiple linear regression, 
+substantially below 0.05.  If the results were non-random, the slope of the linear model would be zero, so 
+in this case, the slope is definitely not zero.  Here are the results.
+
+Call:
+lm(formula = mpg ~ vehicle.length + vehicle.weight + spoiler.angle + 
+    ground.clearance + AWD, data = mecha_car)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19.4701  -4.4994  -0.0692   5.4433  18.5849 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)      -1.040e+02  1.585e+01  -6.559 5.08e-08 ***
+vehicle.length    6.267e+00  6.553e-01   9.563 2.60e-12 ***
+vehicle.weight    1.245e-03  6.890e-04   1.807   0.0776 .  
+spoiler.angle     6.877e-02  6.653e-02   1.034   0.3069    
+ground.clearance  3.546e+00  5.412e-01   6.551 5.21e-08 ***
+AWD              -3.411e+00  2.535e+00  -1.346   0.1852    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.774 on 44 degrees of freedom
+Multiple R-squared:  0.7149,	Adjusted R-squared:  0.6825 
+F-statistic: 22.07 on 5 and 44 DF,  p-value: 5.35e-11
+
+"In most sciences, results yielding a p-value of .05 are considered on the borderline of statistical significance. 
+If the p-value is under .01, results are considered statistically significant and if it's below .005 they are 
+considered highly statistically significant." (Institute for Work & Health, April 2005).  With a p-value as low 
+as 5.35e-11, the combination of variables included in this model can be very predictive in Mecha_Car mpg.
+
+Suspension Coil Summary
+Here is the summary table from the production of 3 suspension coil lots.
+
+Manufacturing_Lot   Mean    Median  Variance    St_Dev  Min_PSI Max_PSI
+Lot1	            1500.00	1500.0	0.9795918	0.9897433	1498	1502
+Lot2	            1500.20	1500.0	7.4693878	2.7330181	1494	1506
+Lot3	            1496.14	1498.5	170.2861224	13.0493725	1452	1542
+
+Quality control was, apparently, very stringent in Manufacturing Lot 1, and slightly less so in Manufacturing Lot 2.
+The production team for Lot 3 must have come to work after visiting the local saloon as their PSI numbers were all
+over the map.  The calculated variance for lot 3 was 170.28, so the production crew failed miserably to meet that
+design specification.
+
+Suspension Coil T-Test
+Using a one-sample T-Test, it cannot be established that suspension coil’s pound-per-inch results are statistically
+different from the mean population results of 1500 psi.  However, if you perform the paired t-test, comparing
+results between lots (1 vs 2, 1 vs 3, and 2 vs 3), the results are significantly different when looking at results
+involving Lot 3.  For Lot 1 vs 2 the p-value = 0.4432, for Lot 2 vs 3, the p-value = 0.01002, and for Lot 1 vs 3,
+the p-value = 0.03012.  Finally, here are results from an ANOVA test:
+
+Simultaneous Tests for General Linear Hypotheses
+Multiple Comparisons of Means: Tukey Contrasts
+
+Fit: aov(formula = PSI ~ Manufacturing_Lot, data = coil2)
+
+Linear Hypotheses:
+                 Estimate Std. Error t value Pr(>|t|)  
+Lot2 - Lot1 == 0    0.200      1.544    0.13   0.9908  
+Lot3 - Lot1 == 0   -3.860      1.544   -2.50   0.0358 *
+Lot3 - Lot2 == 0   -4.060      1.544   -2.63   0.0254 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+(Adjusted p values reported -- single-step method)
+
+Here again, the issues with Manufacturing Lot 3 come into focus.
+
+Design Your Own Study
+To compare Mecha_Car prototypes versus the competition, A/B Testing should be employed.  A/B testing uses a control
+and experimental group to test potential changes using a success metric. A/B testing is used to test whether or not 
+the distribution of the success metric increases in the experiment group instead of the control group.
+
+For categorical variables like color, a chi-squared test should be used.  Despite having no quantitative input, the 
+chi-squared test enables data scientists to quantify the distribution of categorical variables. It’s important, 
+though, to keep the number of unique values and groups relatively low (under 20).  If testing for consumer opinion
+on color, for example, the null hypothesis would be that there is no association between vehicle color and consumer
+preference.
+
+If looking at numeric variables like price, a z-score test will work best if the sample size is small and a 
+two-sample t-test if the sample size is large.  For the z-score test, let's say you want to look at price.  The
+null hypothesis would be that a change in price would not produce a significant difference in consumer preference.
+A p-value of less than 0.5 would prove the alternative hypothesis, that the price difference did impact consumer
+preference.  This would be a one-tailed z-test.  Similarly, the default null hypothesis for a 2-sample t-test is
+that the two groups are equal.
